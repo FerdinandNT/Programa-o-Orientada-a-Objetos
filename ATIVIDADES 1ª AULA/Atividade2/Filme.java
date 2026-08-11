@@ -1,3 +1,5 @@
+package Atividade2;
+
 public class Filme {
     String titulo;
     int duracao;
