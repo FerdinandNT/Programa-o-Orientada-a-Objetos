@@ -14,14 +14,13 @@ public class ContaBancaria {
         this.nome = nome;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
+        this.saldo = saldoInicial;
 
         if (saldoInicial < 0) {
             this.saldo = 0;
-        } else {
-            this.saldo = saldoInicial;
         }
 
-        this.movimentacoes = new java.util.ArrayList<Double>();
+        movimentacoes = new java.util.ArrayList<Double>();
     }
 
     public int getNumero() {
@@ -44,53 +43,42 @@ public class ContaBancaria {
         return saldo;
     }
 
-    public java.util.ArrayList<Double> getMovimentacoes() {
-        return movimentacoes;
-    }
-
     public void setNome(String novo) {
 
-        if (novo != null && !novo.trim().isEmpty()) {
+        if (!novo.equals("")) {
             nome = novo;
         } else {
-            System.out.println("Nome não pode ser vazio");
+            System.out.println("Nome não pode ser vazio.");
         }
     }
 
     public void depositar(double valor) {
 
-        if (valor <= 0) {
-            System.out.println("Valor inválido");
-            return;
+        if (valor > 0) {
+            saldo = saldo + valor;
+            movimentacoes.add(valor);
+            System.out.println("Depósito realizado.");
+        } else {
+            System.out.println("Valor inválido.");
         }
-
-        saldo = saldo + valor;
-        movimentacoes.add(valor);
-
-        System.out.println("Depósito realizado");
     }
 
     public void sacar(double valor) {
 
         if (valor <= 0) {
-            System.out.println("Valor inválido");
-            return;
+            System.out.println("Valor inválido.");
+        } else if (valor > saldo) {
+            System.out.println("Saldo insuficiente.");
+        } else {
+            saldo = saldo - valor;
+            movimentacoes.add(-valor);
+            System.out.println("Saque realizado.");
         }
-
-        if (valor > saldo) {
-            System.out.println("Saldo insuficiente");
-            return;
-        }
-
-        saldo = saldo - valor;
-        movimentacoes.add(-valor);
-
-        System.out.println("Saque realizado");
     }
 
     public void exibirExtrato() {
 
-        System.out.println("EXTRATO");
+        System.out.println("\n--- EXTRATO ---");
 
         for (double movimento : movimentacoes) {
 
@@ -103,51 +91,4 @@ public class ContaBancaria {
 
         System.out.println("Saldo: R$ " + saldo);
     }
-
-    public double totalDepositado() {
-
-        double total = 0;
-
-        for (double movimento : movimentacoes) {
-
-            if (movimento > 0) {
-                total = total + movimento;
-            }
-        }
-
-        return total;
-    }
-
-    public double maiorSaque() {
-
-        double maior = 0;
-
-        for (double movimento : movimentacoes) {
-
-            if (movimento < 0) {
-
-                double saque = -movimento;
-
-                if (saque > maior) {
-                    maior = saque;
-                }
-            }
-        }
-
-        return maior;
-    }
-
-    public void aplicarRendimento(double percentual) {
-
-        if (percentual <= 0) {
-            System.out.println("Percentual inválido");
-            return;
-        }
-
-        double rendimento = saldo * percentual / 100;
-
-        saldo = saldo + rendimento;
-
-        System.out.println("Rendimento aplicado");
-    }
-             }
+}
